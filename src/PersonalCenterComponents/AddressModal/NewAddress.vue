@@ -42,7 +42,7 @@ function flushItems() {
 }
 
 function handleBlank(val) {
-  return val.trim() === ""
+  return val.value.trim() === ""
 }
 
 function handleOk() {

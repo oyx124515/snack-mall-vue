@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import {reactive, ref} from "vue";
+import {inject, reactive, ref} from "vue";
 import option from '@/SignPages/AddressOptions'
 import {message} from "ant-design-vue";
 import {request} from "@/request";
@@ -46,6 +46,8 @@ function flushItems() {
 function handleBlank(val) {
   return val.trim() === ""
 }
+
+const flushAddr = inject("flushAddr")
 
 function handleOk() {
   if (handleBlank(formData.receiver) || handleBlank(formData.telephone) || handleBlank(formData.address2)) {
@@ -79,10 +81,21 @@ function handleOk() {
   }
   request(
       {
-        url:"/userEditAddr/",
-        method:"post",
-
+        url: "/userEditAddr/",
+        method: "post",
+        headers: {token: window.localStorage.getItem("token")},
+        data: {...formData, address1: format_add1}
       }
+  ).then(
+      (resp) => {
+        let data = resp.data;
+        if (data.code === 0) {
+          message.success("修改地址成功");
+          flushAddr();
+          visible.value = false;
+        }
+      },
+      () => message.error("修改失败,无法连接到服务器")
   )
 }
 

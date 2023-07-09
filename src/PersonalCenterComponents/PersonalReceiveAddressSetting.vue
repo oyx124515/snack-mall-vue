@@ -8,8 +8,8 @@
           <div class="item-name">{{ item.address1 }}-{{ item.address2 }}-{{ item.receiver }}</div>
           <div class="item-operation">
             <a-button type="primary" @click="invokeEditAddr(item)">修改地址</a-button>
-            <a-button type="dashed">设置为默认地址</a-button>
-            <a-button type="danger">删除地址</a-button>
+            <a-button type="dashed" @click="invokeDefault(item.id)">设置为默认地址</a-button>
+            <a-button type="danger" @click="invokeDelete(item.id)">删除地址</a-button>
           </div>
         </div>
       </a-list-item>
@@ -95,6 +95,39 @@ function invokeEditAddr(item) {
   editAddr.value.handleEdit(item);
 }
 
+function invokeDefault(id) {
+  request({
+    url: "/userSetDefAddr/",
+    method: "post",
+    data: {id: id},
+    headers: {token: window.localStorage.getItem("token")}
+  }).then(
+      (resp) => {
+        let data = resp.data;
+        if (data.code === 0) {
+          message.success("设置为默认地址成功");
+          flushAddr();
+        }
+      }, () => message.error("设置默认地址失败，无法连接到服务器")
+  )
+}
+
+function invokeDelete(id) {
+  request({
+    url: "/userDeleteAddr/",
+    method: "post",
+    data: {id: id},
+    headers: {token: window.localStorage.getItem("token")}
+  }).then(
+      (resp) => {
+        let data = resp.data;
+        if (data.code === 0) {
+          message.success("删除成功");
+          flushAddr();
+        }
+      }, () => message.error("删除失败，无法连接到服务器")
+  )
+}
 
 function onMountedFunc() {
   flushAddr();
