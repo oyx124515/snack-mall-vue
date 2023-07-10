@@ -9,7 +9,6 @@
       </td>
       <td class="item-basic-width">单价</td>
       <td class="item-basic-width">数量</td>
-      <td class="item-basic-width">服务</td>
       <td class="item-basic-width">实际付款</td>
       <td class="item-basic-width"></td>
       <td class="item-basic-width"></td>
@@ -23,20 +22,17 @@
             <img src="../../static-test/hot-sales.webp" alt="">
           </div>
           <div class="item-detail-words">
-            <div class="item-detail-titile">
-                                    <span>idea正版激活码2022/2023pycharm专业版永久激活clion webstorm
-                                        [交易快照]</span>
+            <div class="item-detail-title">
+              <span>idea正版激活码2022/2023pycharm专业版永久激活clion webstorm[交易快照]</span>
             </div>
             <div class="item-detail-class">
               <span>选择激活：一键激活【永久】</span>
             </div>
             <div class="item-detail-time">
-              <span>发货时间：</span>
-              <span>06月08日 19:56</span>
+
             </div>
             <div class="item-detail-time">
-              <span>收货时间：</span>
-              <span>06月08日 19:56</span>
+
             </div>
           </div>
         </div>
@@ -49,20 +45,15 @@
       <td class="item-basic-width">
         <div>1</div>
       </td>
-      <td>
-        <p>售后服务</p>
-      </td>
       <td class="item-basic-width">
         <div class="item-price">
           <span>￥</span><span>2.69</span>
         </div>
       </td>
+
       <td class="item-basic-width">
-        <p>交易成功</p>
-        <p>订单详情</p>
-        <p>查看物流</p>
+        <button>operation</button>
       </td>
-      <td class="item-basic-width"><button>operation</button></td>
     </tr>
     </tbody>
 
@@ -131,7 +122,7 @@
   width: 293px;
 }
 
-.item-detail-titile {
+.item-detail-title {
   margin-top: 12px;
   color: #3c3c3c;
   font-size: 12px;

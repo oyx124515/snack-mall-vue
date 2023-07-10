@@ -1,48 +1,27 @@
 <template>
-  <div class="top-nav">
-    <div class="top-nav-inside">
-      <span>用户12345</span>
-      <span>首页</span>
-      <span>购物车</span>
-      <span>收藏夹</span>
-    </div>
-  </div>
+  <GoodsHeader></GoodsHeader>
   <a-layout>
     <a-layout-header>
       <div class="logo-index"></div>
       <a-menu v-model:selectedKeys="current" mode="horizontal">
-        <a-menu-item key="wait-receive">
-          待收货
-        </a-menu-item>
-        <a-menu-item key="wait-send">
-          待发货
-        </a-menu-item>
-        <a-menu-item key="wait-pay">
+        <a-menu-item @click="waitPayItem" key="wait-pay">
           待付款
         </a-menu-item>
-        <a-menu-item key="wait-comment">
-          待评价
+        <a-menu-item @click="waitSend" key="wait-send">
+          待发货
         </a-menu-item>
-
-        <a-menu-item key="alipay">
-          <a href="" target="_blank" rel="noopener noreferrer">
-            Navigation Four - Link
-          </a>
+        <a-menu-item @click="waitReceive" key="wait-receive">
+          待收货
+        </a-menu-item>
+        <a-menu-item @click="waitComment" key="wait-comment">
+          待评价
         </a-menu-item>
       </a-menu>
     </a-layout-header>
     <a-layout-content>
 
       <div>
-        <div class="snack-items">
-          <operation-item></operation-item>
-        </div>
-        <div class="snack-items">
-          <operation-item></operation-item>
-        </div>
-        <div class="snack-items">
-          <operation-item></operation-item>
-        </div>
+        <router-view></router-view>
       </div>
 
     </a-layout-content>
@@ -52,15 +31,35 @@
     <a-layout-footer></a-layout-footer>
   </a-layout>
   <div>
-    {{ current }}
   </div>
 </template>
 <script setup>
-import {ref} from 'vue'
-import OperationItem from '@/UserOrderOperation/UserOperationItem/OperationItem'
+import {onMounted, ref} from 'vue'
+import GoodsHeader from '@/GoodsComponents/GoodsHeader'
+import {useRouter} from "vue-router";
 
-const current = ref(['mail']);
+const current = ref(['wait-pay']);
+const router = useRouter();
 
+function waitPayItem() {
+  router.push({name: "waitPayItem"});
+}
+
+function waitSend() {
+  router.push({name: "waitSend"});
+}
+
+function waitReceive() {
+  router.push({name: "waitReceive"});
+}
+
+function waitComment() {
+  router.push({name: "waitComment"});
+}
+
+onMounted(() => {
+  waitPayItem();
+})
 </script>
 <style scoped>
 .top-nav-inside {

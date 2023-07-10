@@ -74,8 +74,34 @@ let router = createRouter(
                 // 订单操作界面 src/UserOrderOperation/UserOperationIndex.vue
                 name: "userOperationIndex",
                 path: "/userOperationIndex",
-                component: () => import("@/UserOrderOperation/UserOperationIndex.vue")
-
+                component: () => import("@/UserOrderOperation/UserOperationIndex.vue"),
+                children: [
+                    // 子路由
+                    {
+                        // 待支付
+                        name: "waitPayItem",
+                        path: "waitPayItem",
+                        component: () => import("@/UserOrderOperation/UserOperationItem/WaitPayItem.vue")
+                    },
+                    {
+                        // 待发货
+                        name: "waitSend",
+                        path: "waitSend",
+                        component: () => import("@/UserOrderOperation/UserOperationItem/WaitSend.vue")
+                    },
+                    {
+                        // 待收货
+                        name: "waitReceive",
+                        path: "waitReceive",
+                        component: () => import("@/UserOrderOperation/UserOperationItem/WaitReceive.vue")
+                    },
+                    {
+                        // 待评价
+                        name: "waitComment",
+                        path: "waitComment",
+                        component: () => import("@/UserOrderOperation/UserOperationItem/WaitComment.vue")
+                    },
+                ]
             },
             {
                 // 订单支付页面
