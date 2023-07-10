@@ -11,10 +11,6 @@
 <script setup>
 import GoodsHeader from '@/GoodsComponents/GoodsHeader.vue'
 import OrderAddress from '@/Order/OrderAddress.vue'
-
-
-
-
 </script>
 
 <style scoped>

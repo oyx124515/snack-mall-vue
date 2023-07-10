@@ -3,9 +3,9 @@
   <!-- 功能模块 -->
   <div class="index-function-model">
     <!--    用户信息展示-->
-      <index-user-info></index-user-info>
-      <index-user-func></index-user-func>
-      <look-for-all></look-for-all>
+    <index-user-info @click="toUserOperationIndex"></index-user-info>
+    <index-user-func></index-user-func>
+    <look-for-all></look-for-all>
   </div>
 
 </template>
@@ -14,6 +14,13 @@
 import IndexUserInfo from '@/index/index-function-vue/IndexUserInfo'
 import IndexUserFunc from '@/index/index-function-vue/IndexUserFunc'
 import LookForAll from '@/index/index-function-vue/LookForAll'
+import {useRouter} from "vue-router";
+
+const router = useRouter();
+
+function toUserOperationIndex() {
+  router.push({name: "userOperationIndex"});
+}
 </script>
 
 <style scoped>

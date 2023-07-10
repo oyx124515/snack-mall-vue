@@ -28,7 +28,7 @@
       <div class="goods-number">
         <span>数量：</span>
         <a-input-number v-model:value.number.lazy="buyNumber" :min="1" :max="stock"/>
-        <span style="margin-left: 6px">库存:{{ stock }}</span>
+        <span style="margin-left: 6px" v-show="selectAttribute!==''">库存:{{ stock }}</span>
       </div>
 
       <div class="operation-button">

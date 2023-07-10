@@ -58,7 +58,7 @@
     <span style="color: #333333;font-size: 12px;font-weight: 700">实付款：</span>
     <span style="color: #999999;font-size: 26px;font-weight: 400">￥</span>
     <span style="color: #ff0036;font-size: 26px;font-weight: 400">{{ sumPrice.toFixed(2) }}</span>
-    <button class="submit-order">提交订单</button>
+    <button class="submit-order" @click="submitOrder">提交订单</button>
   </div>
   <!--  -->
 </template>
@@ -76,6 +76,7 @@ import imgData from '@/GoodsComponents/fallback-png.js'
 import {request} from "@/request";
 import {message, notification} from "ant-design-vue";
 import BaseImgUrl from "@/baseImgUrl";
+import {useRouter} from "vue-router";
 
 const columns = columnsArr
 const table_data = reactive([])
@@ -98,6 +99,41 @@ function table_format(data) {
 }
 
 const store = useStore()
+const router = useRouter()
+
+// 提价订单
+function submitOrder() {
+  let send_data = {
+    sku: store.state.OrderItems[0].sku,
+    spu: store.state.OrderItems[0].spu,
+    quantity: store.state.OrderItems[0].quantity,
+    addrID: selectAddr.value,
+  }
+  console.log(send_data)
+  request({
+    url: "/submitOrder/",
+    method: "post",
+    data: send_data,
+    headers: {token: window.localStorage.getItem("token")}
+  }).then(
+      (resp) => {
+        console.log(resp.data);
+        let data = resp.data;
+        if (data.code === 0) {
+          let str_order_id = data.message;
+          router.replace({
+            name: "payment",
+            params: {orderId: str_order_id}
+          })
+
+        } else {
+          message.error(data.message);
+        }
+
+      }, () => message.error("无法链接服务器,创建订单失败")
+  )
+}
+
 
 function onMountedFunc() {
   // 获取收货地址

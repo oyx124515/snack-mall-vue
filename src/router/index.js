@@ -71,6 +71,20 @@ let router = createRouter(
                 component: () => import("@/UserCollect/UserCollectIndex.vue")
             },
             {
+                // 订单操作界面 src/UserOrderOperation/UserOperationIndex.vue
+                name: "userOperationIndex",
+                path: "/userOperationIndex",
+                component: () => import("@/UserOrderOperation/UserOperationIndex.vue")
+
+            },
+            {
+                // 订单支付页面
+                name: "payment",
+                path: "/payment/:orderId",
+                component: () => import('@/Payment/Payment.vue'),
+                props: true
+            },
+            {
                 // 商品详情页
                 name: "goodsDetailPage",
                 path: "/userCollectIndex/:id",
