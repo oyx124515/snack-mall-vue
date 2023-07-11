@@ -11,13 +11,9 @@
     </div>
     <div style="margin-top: 20px">
       <div class="user-collect-content">
-        <UserCollectItem></UserCollectItem>
-        <UserCollectItem></UserCollectItem>
-        <UserCollectItem></UserCollectItem>
-        <UserCollectItem></UserCollectItem>
-        <UserCollectItem></UserCollectItem>
-        <UserCollectItem></UserCollectItem>
-
+        <template v-for="i in favList" :key=i>
+          <UserCollectItem :id="i"></UserCollectItem>
+        </template>
       </div>
     </div>
 
@@ -27,6 +23,35 @@
 <script setup>
 import GoodsHeader from '@/GoodsComponents/GoodsHeader.vue'
 import UserCollectItem from '@/UserCollect/UserCollectItem.vue'
+import {inject, onMounted, provide, reactive} from "vue";
+import {request} from "@/request";
+import {message} from "ant-design-vue";
+
+const favList = reactive([])
+
+function loadList() {
+  favList.length = 0;
+  request({
+    url: "/getFavList/",
+    method: "post",
+    headers: {token: window.localStorage.getItem("token")}
+  }).then((resp) => {
+        let data = resp.data;
+        console.log(data);
+        data.body.forEach(tar => favList.push(tar))
+      }, () => message.error("获取信息失败")
+  )
+}
+
+provide("reload", loadList)
+
+function mounted() {
+  loadList();
+}
+
+onMounted(
+    () => mounted()
+)
 </script>
 
 

@@ -7,18 +7,31 @@
     <div class="search-form">
       <form class="top-search-form">
         <label>
-          <input type="text" placeholder="零食搜索">
-          <button type="submit">搜索</button>
+          <input v-model="keywords" type="text" placeholder="零食搜索">
+          <button type="submit" @click="startSearch">搜索</button>
         </label>
       </form>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: "SearchContainer"
+<script setup>
+import {ref} from "vue";
+import {useRouter} from "vue-router";
+import {message} from "ant-design-vue";
+
+const keywords = ref("");
+const router = useRouter();
+
+function startSearch() {
+  if (keywords.value.trim() === "") {
+    message.info("请输入搜索内容");
+    return;
+  }
+  router.push({name: "searchIndex", params: {keywords: keywords.value}})
 }
+
+
 </script>
 
 <style scoped>

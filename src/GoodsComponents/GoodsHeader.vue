@@ -9,7 +9,7 @@
         >{{ authNickname }}</span>
       </div>
       <div>
-        <span class="header-operation" @click="toShoppingCartIndex">购物车</span>
+<!--        <span class="header-operation" @click="toShoppingCartIndex">购物车</span>-->
         <span class="header-operation" @click="toUserCollectIndex">收藏夹</span>
       </div>
     </div>

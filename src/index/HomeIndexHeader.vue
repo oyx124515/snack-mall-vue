@@ -16,8 +16,8 @@
           <a @click="toSignUp">免费注册</a>
         </template>
         <span>|</span>
-        <a @click="toShoppingCartIndex">购物车</a>
-        <span>|</span>
+<!--        <a @click="toShoppingCartIndex">购物车</a>-->
+<!--        <span>|</span>-->
         <a @click="toUserCollectIndex">收藏夹</a>
 
         <template v-if="isAuth">

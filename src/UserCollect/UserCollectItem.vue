@@ -1,21 +1,21 @@
 <template>
   <!-- 收藏夹item 的组件   -->
   <div class="hot-sales-item">
-    <img src="../static-test/hot-sales.webp" alt="食品">
+    <img :src="BaseImgUrl+showD.cover" alt="食品">
     <div class="hot-sales-title">
-      <span>良品铺子高蛋白肉脯150g肉干肉脯办公室休闲小吃网红肉类类类类类类类类类类类类类类类类类类类类类类类类类类</span>
+      <span>{{ showD.name }}</span>
     </div>
     <div class="hot-sales-price"><span class="price-unit">￥</span>
-      <span class="price-int">12.88</span>
+      <span class="price-int">{{ showD.starting_price }}</span>
     </div>
 
     <div class="item-mask">
-      <div class="look-for-detail">
+      <div class="look-for-detail" @click="handelDetail">
         <EyeOutlined style="font-size: 50px"></EyeOutlined>
         <p>查看详情</p>
 
       </div>
-      <div class="cancel-collect">
+      <div class="cancel-collect" @click="handelCancel">
         <CloseCircleOutlined style="font-size: 50px"></CloseCircleOutlined>
         <p>取消收藏</p>
       </div>
@@ -27,6 +27,59 @@
 
 <script setup>
 import {EyeOutlined, CloseCircleOutlined} from '@ant-design/icons-vue'
+import {inject, onMounted, ref} from "vue";
+import {request} from "@/request";
+import BaseImgUrl from "@/baseImgUrl";
+import {useRouter} from "vue-router";
+// eslint-disable-next-line no-undef
+const props = defineProps({id: String})
+//inject("reload",loadList)
+const reload = inject("reload")
+
+const router = useRouter()
+
+function handelDetail() {
+  router.push({
+    name: "goodsDetailPage",
+    params: {id: props.id}
+  })
+}
+
+
+function handelCancel() {
+  request({
+    url: "/cancelFav/",
+    method: "post",
+    data: {id: props.id},
+    headers: {token: window.localStorage.getItem("token")}
+  }).then(
+      () => {
+        reload();
+      },
+      () => {
+      }
+  )
+}
+
+const showD = ref({})
+onMounted(
+    () => {
+      console.log(props.id)
+      request({
+        url: "/getSaleCovers/",
+        method: "post",
+        data: {id: props.id},
+        headers: {token: window.localStorage.getItem("token")}
+      }).then(
+          (resp) => {
+            let data = resp.data;
+            console.log(data)
+            showD.value = data.body;
+          }, () => {
+          }
+      )
+    }
+)
 </script>
 
 <style scoped>
@@ -110,8 +163,8 @@ import {EyeOutlined, CloseCircleOutlined} from '@ant-design/icons-vue'
   opacity: 0;
   transition: 0.2s;
 }
-.item-mask:hover
-{
+
+.item-mask:hover {
   display: flex;
   opacity: 1;
 }

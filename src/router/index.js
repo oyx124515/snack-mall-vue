@@ -138,6 +138,12 @@ let router = createRouter(
                 name: "orderIndex",
                 component: () => import("@/Order/OrderIndex.vue"),
             },
+            {
+                path: "/searchIndex/:keywords",
+                name: "searchIndex",
+                component: () => import("@/UserSearch/SearchIndex.vue"),
+                props: true,
+            },
 
 
         ]

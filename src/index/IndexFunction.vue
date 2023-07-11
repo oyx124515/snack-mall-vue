@@ -5,7 +5,7 @@
     <!--    用户信息展示-->
     <index-user-info @click="toUserOperationIndex"></index-user-info>
     <index-user-func></index-user-func>
-    <look-for-all></look-for-all>
+    <look-for-all @click="startSearch"></look-for-all>
   </div>
 
 </template>
@@ -17,6 +17,10 @@ import LookForAll from '@/index/index-function-vue/LookForAll'
 import {useRouter} from "vue-router";
 
 const router = useRouter();
+
+function startSearch() {
+  router.push({name: "searchIndex", params: {keywords: "no-def"}})
+}
 
 function toUserOperationIndex() {
   router.push({name: "userOperationIndex"});

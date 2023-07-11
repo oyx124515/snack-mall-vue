@@ -54,7 +54,7 @@
           </td>
 
           <td class="item-basic-width">
-            <button>评价</button>
+            <button @click="openComment(item.id)">评价</button>
           </td>
         </tr>
         </tbody>
@@ -63,17 +63,63 @@
     </div>
 
   </div>
+
+  <!--  弹框-->
+  <a-modal v-model:visible="visible" title="评论" @ok="handeComment">
+    <a-rate v-model:value="star"/>
+    <br>
+    <a-textarea v-model:value="comment" placeholder="请输入评论...." :rows="4"/>
+  </a-modal>
+
 </template>
 
 <script setup>
 
 
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {request} from "@/request";
 import {message} from "ant-design-vue";
 import BaseImgUrl from "@/baseImgUrl";
 
 const table_data = reactive([])
+const visible = ref(false);
+const subId = ref("");
+const comment = ref("");
+const star = ref(5);
+
+function resetVal() {
+  comment.value = "";
+  star.value = 5;
+}
+
+
+function openComment(id) {
+  resetVal();
+  subId.value = id;
+  visible.value = true;
+}
+
+
+function handeComment() {
+  if (comment.value.trim() === "") {
+    message.info("输入不能为空");
+    return;
+  }
+  request({
+    url: "/comment/",
+    method: "post",
+    data: {content: comment.value, id: subId.value, star: star.value},
+    headers: {token: window.localStorage.getItem("token")}
+  }).then(
+      () => {
+        visible.value = false;
+        message.success("评论成功");
+        flushData();
+      },
+      () => message.error("评论，链接服务器失败")
+  )
+}
+
 
 function flushData() {
   table_data.length = 0;
