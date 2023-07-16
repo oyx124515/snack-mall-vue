@@ -3,24 +3,18 @@
     <div class="index-swiper-content">
 
       <div class="index-swiper-nav">
-        <div>休闲小吃</div>
-        <div>膨化食品</div>
-        <div>豆腐干</div>
-        <div>糖果</div>
-        <div>饼干</div>
-        <div>猪肉类</div>
-        <div></div>
-        <div></div>
+        <div v-for="i in searchKey" :key="i" @click="toSearch(i)">{{ i }}</div>
+
 
       </div>
 
       <!-- content 1146 * 410 -->
       <div class="index-swiper-img">
         <a-carousel autoplay>
-          <div><img src="../static-test/2.jpg" alt="零食"></div>
-          <div><img src="../static-test/2.jpg" alt="零食"></div>
-          <div><img src="../static-test/2.jpg" alt="零食"></div>
-          <div><img src="../static-test/2.jpg" alt="零食"></div>
+
+          <div v-for="i in swiperList" :key="i.spu" @click="toDetail(i.spu)">
+            <img :src="BaseImgUrl+i.img" alt="零食">
+          </div>
         </a-carousel>
       </div>
 
@@ -30,7 +24,51 @@
 </template>
 
 <script setup>
+import BaseImgUrl from "@/baseImgUrl";
+import {onMounted, reactive} from "vue";
+import {request} from "@/request";
+import {message} from "ant-design-vue";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
+
+const swiperList = reactive([
+  {img: "", spu: ""}
+])
+
+const searchKey = reactive(["网红小零食", "湖南特产", "猪肉干"]);
+
+function toSearch(keywords) {
+  router.push({
+    name: "searchIndex",
+    params: {keywords: keywords}
+  })
+}
+
+
+function toDetail(val) {
+  router.push({
+    name: "goodsDetailPage",
+    params: {id: val}
+  })
+}
+
+onMounted(
+    () => {
+      request({
+        url: "/bannerView/",
+        method: "get"
+      }).then(
+          (resp) => {
+
+            let data = resp.data;
+            swiperList.length = 0;
+            data.forEach(tar => swiperList.push(tar))
+          },
+          () => message.error("链接服务器失败")
+      )
+    }
+)
 </script>
 
 <style scoped>
