@@ -17,37 +17,34 @@
   </div>
   <div class="search-result-out">
 
-    <!--    <a-menu v-model:selectedKeys="current" mode="horizontal">-->
-    <!--      <a-menu-item key="mail">-->
-    <!--        综合排序-->
-    <!--      </a-menu-item>-->
-    <!--      <a-menu-item key="a">-->
-    <!--        销量-->
-    <!--      </a-menu-item>-->
-    <!--      <a-menu-item key="c">-->
-    <!--        价格从低到高-->
-    <!--      </a-menu-item>-->
-    <!--      <a-menu-item key="w">-->
-    <!--        价格从高到低-->
-    <!--      </a-menu-item>-->
-    <!--      &lt;!&ndash;      &ndash;&gt;-->
+    <a-menu v-model:selectedKeys="current" mode="horizontal">
+      <a-menu-item key="mail">
+        综合排序
+      </a-menu-item>
+      <a-menu-item key="a">
+        销量
+      </a-menu-item>
+      <a-menu-item key="c">
+        价格从低到高
+      </a-menu-item>
+      <a-menu-item key="w">
+        价格从高到低
+      </a-menu-item>
+      <!--      -->
 
-    <!--      &lt;!&ndash;      &ndash;&gt;-->
-    <!--    </a-menu>-->
+      <!--      -->
+    </a-menu>
     <br>
-    <!--    <div>-->
-    <!--      <span style="display: inline-block;margin-left: 10px">价格区间：</span>-->
-    <!--      <a-input-number v-model:value.lazy.number="priceStart" addon-before="￥" :min="1"></a-input-number>-->
-    <!--      <span style="display: inline-block;margin: 0 12px">-</span>-->
-    <!--      <a-input-number v-model:value.lazy.number="priceEnd" addon-before="￥" :min="priceStart"></a-input-number>-->
-    <!--      <a-button type="primary" style="margin-left: 12px">确定</a-button>-->
-    <!--    </div>-->
+    <div>
+      <span style="display: inline-block;margin-left: 10px">价格区间：</span>
+      <a-input-number v-model:value.lazy.number="priceStart" addon-before="￥" :min="1"></a-input-number>
+      <span style="display: inline-block;margin: 0 12px">-</span>
+      <a-input-number v-model:value.lazy.number="priceEnd" addon-before="￥" :min="priceStart"></a-input-number>
+      <a-button type="primary" style="margin-left: 12px">确定</a-button>
+    </div>
     <br>
     <div class="search-item-list">
-      <SalesItem v-for="i in showData" :key="i" :id="i"
-
-                 @click="toDetail(i)"
-      ></SalesItem>
+      <SalesItem v-for="i in showData" :key="i" :id="i" @click="toDetail(i)"></SalesItem>
 
 
     </div>
@@ -110,7 +107,7 @@ onMounted(
 .search-result-out {
   width: 1226px;
   padding: 10px;
-  margin: 0 auto;
+  margin: 20px auto 0;
   background-color: #ffffff;
   border-radius: 12px;
   box-sizing: border-box;

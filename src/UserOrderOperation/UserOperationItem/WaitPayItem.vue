@@ -54,7 +54,7 @@
           </td>
 
           <td class="item-basic-width">
-            <a-button class="button-set" type="primary" @click="handlePay(item.id)">支付</a-button>
+            <a-button class="button-set" type="primary" @click="handlePay(item)">支付</a-button>
             <a-button class="button-set" type="dashed" @click="handleCancel(item.id)">取消订单</a-button>
           </td>
         </tr>
@@ -74,7 +74,9 @@ import {request} from "@/request";
 import {message} from "ant-design-vue";
 import BaseImgUrl from "@/baseImgUrl";
 import {useRouter} from "vue-router";
+import {useStore} from "vuex";
 
+const store = useStore()
 const table_data = reactive([])
 const router = useRouter()
 
@@ -100,10 +102,13 @@ function flushData() {
       () => message.info("获取信息失败"))
 }
 
-function handlePay(pk) {
+function handlePay(item) {
+
+  store.commit("CLEAN_CREATE_ORDER")
+  store.commit("SET_CREATE_ORDER", [item.id])
+  store.commit("SET_SUM_PRICE", item.pay_money)
   router.replace({
     name: "payment",
-    params: {orderId: pk}
   })
 }
 

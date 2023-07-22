@@ -33,7 +33,7 @@
 
       <div class="operation-button">
         <button class="button-buy-now" @click="handleBuy">立即购买</button>
-        <button class="button-add-car">加入购物车</button>
+        <button class="button-add-car" @click="handleAddShoppingCart">加入购物车</button>
         <span class="div-i">|</span>
 
         <div @click="HandleCollect()" ref="collectDiv" class="collected">
@@ -121,6 +121,32 @@ function handleBuy() {
         name: "orderIndex",
       }
   )
+}
+
+function handleAddShoppingCart() {
+  if (!authed.value) {
+    message.info("请登陆后操作");
+    return;
+  }
+  if (selectAttribute.value === "") {
+    message.info("请选择你需要购买的商品类型");
+    return;
+  }
+  let send_data = {spu: props.id, sku: selectAttribute.value, quantity: buyNumber.value}
+  request({
+    url: "/addShoppingCart/", method: "post", data: send_data, headers: {token: localStorage.getItem("token")}
+  }).then(
+      (resp) => {
+        let data = resp.data;
+        if (data.code === 0) {
+          message.info("添加到购物车成功");
+        } else {
+          message.info(data.message);
+        }
+      },
+      () => message.error("链接服务器失败,无法加入到购物车")
+  )
+
 }
 
 // 改变收藏样式的函数

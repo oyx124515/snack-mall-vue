@@ -106,9 +106,8 @@ let router = createRouter(
             {
                 // 订单支付页面
                 name: "payment",
-                path: "/payment/:orderId",
+                path: "/payment",
                 component: () => import('@/Payment/Payment.vue'),
-                props: true
             },
             {
                 // 商品详情页

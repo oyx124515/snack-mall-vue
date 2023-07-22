@@ -100,7 +100,7 @@ onMounted(
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: #42b983;
+  background-color: transparent;
 }
 
 .index-swiper-img {
@@ -122,6 +122,7 @@ onMounted(
   line-height: 45px;
   font-size: 16px;
   box-sizing: border-box;
+  padding-left: 12px;
   height: 45px;
   width: 336px;
   background-color: transparent;

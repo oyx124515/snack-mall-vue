@@ -3,9 +3,9 @@
   <div class="shopping-cart-content">
 
     <goods-header></goods-header>
-    <div style="margin-top: 20px">
-      <shopping-cart-search></shopping-cart-search>
-    </div>
+    <!--    <div style="margin-top: 20px">-->
+    <!--      <shopping-cart-search></shopping-cart-search>-->
+    <!--    </div>-->
     <div style="margin-top: 20px">
       <shopping-cart-items></shopping-cart-items>
     </div>
@@ -17,12 +17,13 @@
 <script setup>
 
 import GoodsHeader from '@/GoodsComponents/GoodsHeader.vue'
-import ShoppingCartSearch from '@/ShoppingCart/ShoppingCartSearch.vue'
+// import ShoppingCartSearch from '@/ShoppingCart/ShoppingCartSearch.vue'
 import ShoppingCartItems from '@/ShoppingCart/ShoppingCartItems.vue'
 </script>
 
 <style scoped>
 .shopping-cart-content {
+  min-height: 100vh;
   background-color: #DEDEDD;
 }
 

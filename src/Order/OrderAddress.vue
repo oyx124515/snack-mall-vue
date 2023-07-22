@@ -37,7 +37,7 @@
         </template>
 
         <template v-else-if="column.key === 'quantity'">
-          <span>{{ record.quantity }}</span>
+          <a-input-number v-model:value.number="record.quantity" :min="0" :max="record.stock"/>
         </template>
 
         <template v-else-if="column.key === 'singlePrice'">
@@ -52,22 +52,38 @@
       </template>
 
     </a-table>
+
   </div>
+
+  <!--  展示优惠卷信息-->
+  <div class="order-address-content">
+    <p v-if="couponList.length === 0">
+      没有可用的优惠券
+    </p>
+
+    <a-radio-group v-model:value="selectCoupon">
+      <template v-for="i in couponList" :key="i.id">
+        <a-radio :style="radioStyle" :value="i.id">使用满{{ i.max }}减{{ i.reduce }}优惠券</a-radio>
+      </template>
+    </a-radio-group>
+  </div>
+  <!--  展示优惠卷信息end-->
+
+
   <!--  -->
   <div class="order-address-content">
     <span style="color: #333333;font-size: 12px;font-weight: 700">实付款：</span>
     <span style="color: #999999;font-size: 26px;font-weight: 400">￥</span>
     <span style="color: #ff0036;font-size: 26px;font-weight: 400">{{ sumPrice.toFixed(2) }}</span>
+    <span style="color: #333333;font-size: 12px;font-weight: 700">{{ couponMessage }}</span>
     <button class="submit-order" @click="submitOrder">提交订单</button>
   </div>
   <!--  -->
 </template>
 
 <script setup>
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watchEffect} from "vue";
 import {useStore} from 'vuex'
-
-const selectAddr = ref("")
 
 
 import {reactive,} from "vue";
@@ -81,7 +97,22 @@ import {useRouter} from "vue-router";
 const columns = columnsArr
 const table_data = reactive([])
 const addrOptions = reactive([])
+// 总计价格
 const sumPrice = ref(0);
+// 已经选择的地址id
+const selectAddr = ref("")
+// 已选择的优惠券id
+const selectCoupon = ref("")
+const couponMessage = ref("")
+
+// 优惠券的list
+const couponList = reactive([])
+const radioStyle = reactive({
+  display: 'flex',
+  height: '30px',
+  lineHeight: '30px',
+});
+
 
 function table_format(data) {
   data.forEach(
@@ -98,17 +129,56 @@ function table_format(data) {
   })
 }
 
+
+// 监视数据
+watchEffect(() => {
+  sumPrice.value = 0;
+  table_data.forEach(tar => {
+    sumPrice.value = sumPrice.value + (tar.quantity * tar.singlePrice)
+  })
+  if (selectCoupon.value !== "") {
+    const findTar = couponList.find((tar) => {
+      return tar.id === selectCoupon.value
+    })
+    if (findTar.max > sumPrice.value) {
+      message.info("未达到优惠价,不可用该优惠券");
+      couponMessage.value = "";
+      selectCoupon.value = "";
+    } else {
+      couponMessage.value = "已优惠" + findTar.reduce + "￥";
+      sumPrice.value = sumPrice.value - findTar.reduce;
+    }
+  } else {
+    couponMessage.value = "";
+  }
+})
+
+
 const store = useStore()
 const router = useRouter()
+
 
 // 提价订单
 function submitOrder() {
   let send_data = {
-    sku: store.state.OrderItems[0].sku,
-    spu: store.state.OrderItems[0].spu,
-    quantity: store.state.OrderItems[0].quantity,
+    items: [],
     addrID: selectAddr.value,
   }
+  table_data.forEach(tar => {
+    send_data.items.push(
+        {
+          sku: tar.sku,
+          spu: tar.spu,
+          quantity: tar.quantity
+        }
+    )
+
+  });
+
+  if (selectCoupon.value !== "") {
+    send_data["userCouponID"] = selectCoupon.value;
+  }
+  //
   console.log(send_data)
   request({
     url: "/submitOrder/",
@@ -120,14 +190,13 @@ function submitOrder() {
         console.log(resp.data);
         let data = resp.data;
         if (data.code === 0) {
-          let str_order_id = data.message;
-          router.replace({
-            name: "payment",
-            params: {orderId: str_order_id}
-          })
-
+          message.info(data.message);
+          store.commit("SET_SUM_PRICE", data.body.sumPrice);
+          store.commit("CLEAN_CREATE_ORDER");
+          store.commit("SET_CREATE_ORDER", data.body.orderIDs);
+          router.replace({name: "payment"});
         } else {
-          message.error(data.message);
+          message.error(data.body.message);
         }
 
       }, () => message.error("无法链接服务器,创建订单失败")
@@ -152,11 +221,9 @@ function onMountedFunc() {
       },
       () => message.error("获取收货地址失败")
   )
+
   // 获取订单信息
-
-
   const send = [];
-  console.log(store.state.OrderItems)
   store.state.OrderItems.forEach(e => send.push(e))
   request({
     url: "/getOrderListInfo/",
@@ -176,6 +243,15 @@ function onMountedFunc() {
         }
       },
       () => message.error("获取订单信息失败")
+  )
+  // 获取优惠券信息
+  request({url: "/getCoupon/", headers: {token: window.localStorage.getItem("token")}}).then(
+      (resp) => {
+        let data = resp.data;
+        couponList.length = 0;
+        data.body.forEach(tar => couponList.push(tar))
+      },
+      () => message.error("无法链接服务器,获取优惠券信息失败")
   )
 }
 

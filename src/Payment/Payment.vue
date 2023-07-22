@@ -2,8 +2,10 @@
   <div class="content-div">
     <div class="center-content">
       <div class="orderId-text">
-        订单号:{{ orderId }}
+        <p>支付订单号:</p>
+        <p v-for="i in orderIds" :key="i">{{ i }}</p>
       </div>
+
       <div style="display: flex;justify-content: center;padding: 40px">
         <img class="qr-img" src="../assets/QR-code-test.jpg" alt="付款码">
       </div>
@@ -25,25 +27,24 @@
 
 <script setup>
 
-import {onMounted, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {request} from "@/request";
 import {message} from "ant-design-vue";
 import {useRouter} from "vue-router";
-
-// eslint-disable-next-line no-undef
-const props = defineProps({orderId: String})
+import {useStore} from "vuex";
 
 const pay_money = ref("")
-const orderId = ref("")
+const orderIds = reactive([])
 const router = useRouter()
+const store = useStore()
 
 function handleSuccess() {
   request(
       {
         url: "/handleOrderBySuccess/",
         method: "post",
-        data: {id: props.orderId},
-        headers: {token: window.localStorage.getItem("token")}
+        headers: {token: window.localStorage.getItem("token")},
+        data: orderIds
       }
   ).then(
       (resp) => {
@@ -52,7 +53,7 @@ function handleSuccess() {
           router.replace({name: "userOperationIndex"});
         }
       },
-      () => message.error("支付失败无法连接到服务器")
+      () => message.error("支付失败,无法连接到服务器")
   )
 }
 
@@ -62,26 +63,8 @@ function handleFault() {
 }
 
 function onMountedFunc() {
-  orderId.value = props.orderId
-  request(
-      {
-        url: "/getOrderByID/",
-        method: "post",
-        data: {id: props.orderId},
-        headers: {token: window.localStorage.getItem("token")}
-      }
-  ).then(
-      (resp) => {
-        let data = resp.data;
-        if (data.code === 0) {
-          pay_money.value = data.message
-        }
-      }
-      , () => {
-        message.error("获取服务器数据失败");
-      }
-  )
-
+  pay_money.value = store.state.sumPrice
+  store.state.CreateOrderIDs.forEach(tar => orderIds.push(tar))
 }
 
 onMounted(() => onMountedFunc())
@@ -110,7 +93,8 @@ onMounted(() => onMountedFunc())
 .orderId-text {
   padding-top: 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   color: #000000;
   font-size: 18px;
 }
