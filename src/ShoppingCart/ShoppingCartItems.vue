@@ -102,8 +102,35 @@ function handleSettle() {
         )
       }
   );
-  store.commit("ADD_ORDER_ITEMS", order_list);
-  router.replace({name: "orderIndex"});
+  //
+  let send_data = [];
+  rowSelection.state.forEach(
+      tar => send_data.push(tar.id)
+  );
+  request(
+      {
+        url: "/deleteShoppingCart/",
+        headers: {token: localStorage.getItem("token")},
+        data: send_data,
+        method: "post",
+      }
+  ).then(
+      (resp) => {
+        let data = resp.data;
+        if (data.code === 0) {
+          //
+          store.commit("ADD_ORDER_ITEMS", order_list);
+          router.replace({name: "orderIndex"});
+        } else {
+          message.error("无法完成结算")
+        }
+      },
+      () => {
+        message.error("链接服务器失败,无法完成结算")
+      }
+  )
+
+
 }
 
 function onSelectChange(selectedRowKeys) {

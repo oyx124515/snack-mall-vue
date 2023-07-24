@@ -1,6 +1,6 @@
 <template>
   <!--  用户搜索页 -->
-  <div style="background-color: #DEDEDD">
+  <div style="background-color: #DEDEDD;min-height: 100vh">
 
     <GoodsHeader></GoodsHeader>
 

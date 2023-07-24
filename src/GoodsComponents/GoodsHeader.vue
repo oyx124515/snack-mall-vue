@@ -29,6 +29,9 @@ const router = useRouter()
 const isAuthed = ref(false);
 const authNickname = ref("你好，请登录");
 
+
+
+
 function toUserIndex() {
   router.push({
     name: "index"

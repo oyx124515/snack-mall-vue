@@ -137,12 +137,27 @@ let router = createRouter(
                 name: "orderIndex",
                 component: () => import("@/Order/OrderIndex.vue"),
             },
+            // 搜索页
             {
                 path: "/searchIndex/:keywords",
                 name: "searchIndex",
                 component: () => import("@/UserSearch/SearchIndex.vue"),
                 props: true,
             },
+            // 优惠券页面
+            {
+                path: "/couponIndex",
+                name: "couponIndex",
+                component: () => import("@/Coupon/CouponIndex.vue"),
+                props: true,
+            },
+            // 咨询页面
+            {
+                path: "/infoIndex",
+                name: "infoIndex",
+                component: () => import("@/Information/InfoIndex.vue"),
+                props: true,
+            }
 
 
         ]

@@ -32,8 +32,9 @@
       </div>
 
       <div class="operation-button">
-        <button class="button-buy-now" @click="handleBuy">立即购买</button>
-        <button class="button-add-car" @click="handleAddShoppingCart">加入购物车</button>
+        <button class="button-buy-now" @click="handleBuy" style="border-radius: 12px 0 0 12px">立即购买</button>
+        <button class="button-add-car" @click="handleAddShoppingCart" style="border-radius: 0 12px 12px 0">加入购物车
+        </button>
         <span class="div-i">|</span>
 
         <div @click="HandleCollect()" ref="collectDiv" class="collected">
@@ -340,6 +341,7 @@ onMounted(() => {
 .operation-button {
   margin-top: 60px;
   margin-left: 20px;
+  border-radius: 12px;
 }
 
 .operation-button button {

@@ -58,6 +58,7 @@ onMounted(
 <style scoped>
 .user-collect-index {
   background-color: #DEDEDD;
+  min-height: 100vh;
 }
 
 .user-collect-title {
